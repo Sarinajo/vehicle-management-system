@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Vehicle Management{% endblock %}</title>
+
+    <!-- Custom CSS -->
+    <link href="{% static 'main/css/scripts.css' %}" rel="stylesheet">
+
+    <!-- Nepali Datepicker CSS -->
+    <link href="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/css/nepali.datepicker.v5.0.6.min.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    <div class="border-end bg-white" id="sidebar-wrapper">
+        {% if user.is_authenticated %}
+        <div class="sidebar-heading border-bottom bg-light">
+            Vehicle Management<br>
+            <small>Hi, {{ user.username }}</small>
+        </div>
+        {% else %}
+        <div class="sidebar-heading border-bottom bg-light">
+            Vehicle Management
+        </div>
+        {% endif %}
+
+        <div class="list-group list-group-flush">
+            <a href="{% url 'home' %}" class="list-group-item list-group-item-action list-group-item-light p-3">Home</a>
+            <a href="{% url 'my_records' %}" class="list-group-item list-group-item-action list-group-item-light p-3">My Records</a>
+            {% if user.is_superuser %}
+            <a href="{% url 'reports' %}" class="list-group-item list-group-item-action list-group-item-light p-3">Reports</a>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}" class="list-group-item list-group-item-action list-group-item-light p-3">Logout</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <button class="btn btn-primary m-3" id="sidebarToggle">Toggle Menu</button>
+        <div class="container-fluid mt-3">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'main/js/scripts.js' %}"></script>
+
+<!-- Nepali Datepicker JS -->
+<script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.6.min.js" type="text/javascript"></script>
+
+<!-- Initialize Nepali Datepicker & Sidebar Toggle -->
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Nepali datepickers (make sure your inputs have these IDs)
+    var dateInput = document.getElementById("date-nepali");
+    var billInput = document.getElementById("bill-nepali");
+
+    if(dateInput) dateInput.NepaliDatePicker();
+    if(billInput) billInput.NepaliDatePicker();
+
+    // Sidebar toggle
+    var toggleButton = document.getElementById("sidebarToggle");
+    if(toggleButton) {
+        toggleButton.addEventListener("click", function(e) {
+            e.preventDefault();
+            document.getElementById("wrapper").classList.toggle("toggled");
+        });
+    }
+});
+</script>
+
+</body>
+</html>

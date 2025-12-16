@@ -1,0 +1,43 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+
+    <!-- Bootstrap -->
+    <link href="{% static 'main/css/scripts.css' %}" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container d-flex justify-content-center align-items-center"
+     style="min-height: 100vh;">
+
+    <div class="card p-4" style="width: 350px;">
+        <h4 class="text-center mb-4">Login</h4>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="username"
+                       class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password"
+                       class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                Login
+            </button>
+            <a href="{% url 'register' %}">Create an account</a>
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
