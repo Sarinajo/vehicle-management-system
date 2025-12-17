@@ -12,26 +12,42 @@
                 <th>Date (BS)</th>
                 <th>Vehicle Number</th>
                 <th>Type</th>
+                <th>Maintenance Cost</th>
+                <th>Fuel Cost</th>
                 <th>Total Cost</th>
+                <th>Distance Traveled</th>
                 <th>Driver</th>
                 <th>Paid To</th>
                 <th>Bill Number</th>
                 <th>Bill Date (BS)</th>
-                <th>Remarks</th>
+                <th>Reason for Maintenance</th>
             </tr>
         </thead>
         <tbody>
         {% for record in user_records %}
             <tr>
-                <td>{{ record.bs_date.year }}-{{ record.bs_date.month }}-{{ record.bs_date.day }}</td>
+                <td>
+  {{ record.bs_date.year }}-
+  {{ record.bs_date.month|stringformat:"02d" }}-
+  {{ record.bs_date.day|stringformat:"02d" }}
+</td>
+
                 <td>{{ record.vehicle_number }}</td>
                 <td>{{ record.vehicle_type }}</td>
+                <td>{{ record.maintenance_cost|floatformat:2 }}</td>
+                <td>{{ record.fuel_cost|floatformat:2 }}</td>
                 <td>{{ record.total_cost|floatformat:2 }}</td>
-                <td>{{ record.driver_name }}</td>
+                <td>{{ record.distance_traveled|floatformat:0 }} Km</td>
+                <td>{{ record.driver.name }}</td>
                 <td>{{ record.paid_to_company }}</td>
                 <td>{{ record.bill_number }}</td>
-                <td>{{ record.bs_bill_date.year }}-{{ record.bs_bill_date.month }}-{{ record.bs_bill_date.day }}</td>
-                <td>{{ record.remarks }}</td>
+                <td>
+  {{ record.bs_bill_date.year }}-
+  {{ record.bs_bill_date.month|stringformat:"02d" }}-
+  {{ record.bs_bill_date.day|stringformat:"02d" }}
+</td>
+
+                <td>{{ record.reason_for_maintenance }}</td>
             </tr>
         {% endfor %}
         </tbody>

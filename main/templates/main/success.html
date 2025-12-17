@@ -6,18 +6,32 @@
 <div class="card">
     <div class="card-body">
         <ul class="list-group list-group-flush">
-            <li class="list-group-item"><strong>Date:</strong> {{ record.bs_date.year }}-{{ record.bs_date.month }}-{{ record.bs_date.day }}</li>
-            <li class="list-group-item"><strong>Vehicle Number:</strong> {{ record.vehicle_number }}</li>
-            <li class="list-group-item"><strong>Vehicle Type:</strong> {{ record.vehicle_type }}</li>
-            <li class="list-group-item"><strong>Maintenance Cost:</strong> {{ record.maintenance_cost }}</li>
-            <li class="list-group-item"><strong>Fuel Cost:</strong> {{ record.fuel_cost }}</li>
-            <li class="list-group-item"><strong>Total Cost:</strong> {{ record.total_cost }}</li>
-            <li class="list-group-item"><strong>Driver Name:</strong> {{ record.driver_name }}</li>
-            <li class="list-group-item"><strong>Paid to Company:</strong> {{ record.paid_to_company }}</li>
-            <li class="list-group-item"><strong>Bill Number:</strong> {{ record.bill_number }}</li>
-            <li class="list-group-item"><strong>Bill Date:</strong> {{ record.bs_bill_date.year }}-{{ record.bs_bill_date.month }}-{{ record.bs_bill_date.day }}</li>
-            <li class="list-group-item"><strong>Remarks:</strong> {{ record.remarks }}</li>
-        </ul>
+    <li class="list-group-item">
+  <strong>Date:</strong>
+  {{ record.bs_date.year }}-
+  {{ record.bs_date.month|stringformat:"02d" }}-
+  {{ record.bs_date.day|stringformat:"02d" }}
+</li>
+
+    <li class="list-group-item"><strong>Vehicle Number:</strong> {{ record.vehicle_number }}</li>
+    <li class="list-group-item"><strong>Vehicle Type:</strong> {{ record.vehicle_type }}</li>
+    <li class="list-group-item"><strong>Maintenance Cost:</strong> {{ record.maintenance_cost|floatformat:2 }}</li>
+    <li class="list-group-item"><strong>Fuel Cost:</strong> {{ record.fuel_cost|floatformat:2 }}</li>
+    <li class="list-group-item"><strong>Total Cost:</strong> {{ record.total_cost|floatformat:2 }}</li>
+    <li class="list-group-item"><strong>Driver Name:</strong> {{ record.driver.name }}</li>
+    <li class="list-group-item"><strong>Paid to Company:</strong> {{ record.paid_to_company }}</li>
+    <li class="list-group-item"><strong>Distance Traveled:</strong> {{ record.distance_traveled }} km</li>
+    <li class="list-group-item"><strong>Bill Number:</strong> {{ record.bill_number }}</li>
+    <li class="list-group-item">
+  <strong>Bill Date:</strong>
+  {{ record.bs_bill_date.year }}-
+  {{ record.bs_bill_date.month|stringformat:"02d" }}-
+  {{ record.bs_bill_date.day|stringformat:"02d" }}
+</li>
+
+    <li class="list-group-item"><strong>Reason for Maintenance:</strong> {{ record.reason_for_maintenance }}</li>
+</ul>
+
     </div>
 </div>
 <a href="{% url 'home' %}" class="btn btn-primary mt-4">Submit Another Record</a>

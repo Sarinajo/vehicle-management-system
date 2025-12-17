@@ -12,4 +12,6 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('my-records/', views.my_records, name='my_records'),
     path('reports/', views.reports, name='reports'),
+    path('drivers/', views.manage_drivers, name='manage_drivers'),
+
     ]

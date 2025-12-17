@@ -1,7 +1,21 @@
 from django import forms
-from .models import VehicleRecord
+from .models import VehicleRecord, Driver
 
 class VehicleRecordForm(forms.ModelForm):
+    # Keep driver dropdown searchable/typeable
+    driver = forms.ModelChoiceField(
+        queryset=Driver.objects.all(),
+        widget=forms.Select(attrs={
+            'class': 'form-control selectpicker',
+            'data-live-search': 'true'
+        }),
+        required=True
+    )
+    fuel_cost = forms.DecimalField(
+        required=False,
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
+    )
+
     class Meta:
         model = VehicleRecord
         fields = [
@@ -10,11 +24,12 @@ class VehicleRecordForm(forms.ModelForm):
             'vehicle_type',
             'maintenance_cost',
             'fuel_cost',
-            'driver_name',
+            'driver',
+            'distance_traveled',  # <-- NEW field
             'paid_to_company',
             'bill_number',
             'bill_date',
-            'remarks',
+            'reason_for_maintenance',  # <-- renamed
         ]
         widgets = {
             'date': forms.TextInput(attrs={'id': 'date-nepali', 'class': 'form-control'}),
@@ -23,8 +38,19 @@ class VehicleRecordForm(forms.ModelForm):
             'vehicle_type': forms.Select(attrs={'class': 'form-control'}),
             'maintenance_cost': forms.NumberInput(attrs={'class': 'form-control'}),
             'fuel_cost': forms.NumberInput(attrs={'class': 'form-control'}),
-            'driver_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'driver': forms.Select(attrs={'class': 'form-control selectpicker', 'data-live-search': 'true'}),
+            'distance_traveled': forms.NumberInput(attrs={'class': 'form-control'}),  # NEW
             'paid_to_company': forms.TextInput(attrs={'class': 'form-control'}),
             'bill_number': forms.TextInput(attrs={'class': 'form-control'}),
-            'remarks': forms.TextInput(attrs={'class': 'form-control'}),
+            'reason_for_maintenance': forms.TextInput(attrs={'class': 'form-control'}),  # RENAMED
+        }
+
+# Form for admin to add drivers
+class DriverForm(forms.ModelForm):
+    class Meta:
+        model = Driver
+        fields = ['name', 'driver_id']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter driver name'}),
+            'driver_id': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter driver ID'}),
         }
