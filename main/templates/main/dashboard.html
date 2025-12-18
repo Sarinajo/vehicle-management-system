@@ -1,0 +1,11 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h1>Welcome, {{ user.username }}!</h1>
+    <p class="lead">Use the button below to go to the vehicle record form.</p>
+    <a href="{% url 'home' %}" class="btn btn-primary btn-lg">Go to Form Page</a>
+</div>
+{% endblock %}

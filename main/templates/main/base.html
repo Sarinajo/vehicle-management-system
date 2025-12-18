@@ -8,11 +8,20 @@
     <!-- Custom CSS -->
     <link href="{% static 'main/css/scripts.css' %}" rel="stylesheet">
 
-    <!-- Bootstrap Select CSS for searchable/typeable dropdowns -->
+    <!-- Bootstrap Select CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
 
     <!-- Nepali Datepicker CSS -->
     <link href="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/css/nepali.datepicker.v5.0.6.min.css" rel="stylesheet">
+    <style>
+        #sidebar-wrapper .list-group-item.active {
+    background-color: #0d6efd; /* Bootstrap primary blue */
+    color: white; /* Text color */
+    font-weight: bold; /* Optional: make active item bold */
+    border-left: 4px solid #0b5ed7; /* Optional: small left border highlight */
+}
+
+    </style>
 </head>
 <body>
 
@@ -31,12 +40,37 @@
         {% endif %}
 
         <div class="list-group list-group-flush">
-            <a href="{% url 'home' %}" class="list-group-item list-group-item-action list-group-item-light p-3">Home</a>
-            <a href="{% url 'my_records' %}" class="list-group-item list-group-item-action list-group-item-light p-3">My Records</a>
+            <!-- Dashboard -->
+            <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Dashboard</a>
+
+            <!-- Vehicle Form -->
+            <a href="{% url 'home' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Vehicle Form</a>
+
+            <!-- My Records -->
+            <a href="{% url 'my_records' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'my_records' %}active{% endif %}">My Records</a>
+
             {% if user.is_superuser %}
-            <a href="{% url 'reports' %}" class="list-group-item list-group-item-action list-group-item-light p-3">Reports</a>
+            <div class="list-group-item p-0">
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                   data-bs-toggle="collapse"
+                   href="#reportsSubMenu"
+                   role="button"
+                   aria-expanded="false"
+                   aria-controls="reportsSubMenu">
+                    Reports
+                </a>
+
+                <div class="collapse ps-3" id="reportsSubMenu">
+                    <a href="{% url 'reports_raw_driver' %}" class="list-group-item list-group-item-action list-group-item-light">Raw Data (By Driver)</a>
+                    <a href="{% url 'reports_summary_driver' %}" class="list-group-item list-group-item-action list-group-item-light">Summary (By Driver)</a>
+                    <a href="{% url 'reports_raw_vehicle' %}" class="list-group-item list-group-item-action list-group-item-light">Raw Data (By Vehicle)</a>
+                    <a href="{% url 'reports_summary_vehicle' %}" class="list-group-item list-group-item-action list-group-item-light">Summary (By Vehicle)</a>
+                </div>
+            </div>
+
             <a href="{% url 'manage_drivers' %}" class="list-group-item list-group-item-action list-group-item-light p-3">Manage Drivers</a>
             {% endif %}
+
             {% if user.is_authenticated %}
             <a href="{% url 'logout' %}" class="list-group-item list-group-item-action list-group-item-light p-3">Logout</a>
             {% endif %}
@@ -52,7 +86,7 @@
     </div>
 </div>
 
-<!-- jQuery (required for Bootstrap Select) -->
+<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- Bootstrap JS Bundle -->
@@ -66,9 +100,7 @@
 
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() {
-    // -----------------------
     // Nepali Datepickers
-    // -----------------------
     var dateInput = document.getElementById("date-nepali");
     var billInput = document.getElementById("bill-nepali");
     var fromInput = document.getElementById("from-date");
@@ -79,14 +111,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if(fromInput) fromInput.NepaliDatePicker();
     if(toInput) toInput.NepaliDatePicker();
 
-    // -----------------------
     // Bootstrap Select
-    // -----------------------
     $('.selectpicker').selectpicker();
 
-    // -----------------------
     // Sidebar Toggle
-    // -----------------------
     const sidebarToggle = document.body.querySelector('#sidebarToggle');
     if (sidebarToggle) {
         sidebarToggle.addEventListener('click', event => {

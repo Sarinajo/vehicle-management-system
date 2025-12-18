@@ -1,0 +1,79 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Summary (By Driver){% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Summary (By Driver)</h2>
+
+<form method="get">
+  <div class="row mb-3">
+      <div class="col-md-3">
+          <label>From Date</label>
+          <input type="text" id="from-date" name="from_date" class="form-control" value="{{ from_date }}" required placeholder="Select From Date">
+      </div>
+      <div class="col-md-3">
+          <label>To Date</label>
+          <input type="text" id="to-date" name="to_date" class="form-control" value="{{ to_date }}" required placeholder="Select To Date">
+      </div>
+      <div class="col-md-3">
+          <label>Driver</label>
+          <select name="driver" class="form-control selectpicker" data-live-search="true">
+              <option value="">All Drivers</option>
+              {% for d in drivers %}
+                  <option value="{{ d.id }}" {% if d.id == selected_driver %}selected{% endif %}>{{ d.name }}</option>
+              {% endfor %}
+          </select>
+      </div>
+  </div>
+
+  <div class="mb-3">
+      <button type="submit" name="action" value="view" class="btn btn-success me-2">View Summary</button>
+      <button type="submit" name="action" value="csv" class="btn btn-primary">Download Summary CSV</button>
+  </div>
+</form>
+
+{% if show_message %}
+<div class="alert alert-info mt-3">
+    Please select at least one filter (date or driver) to view the summary.
+</div>
+{% endif %}
+
+{% if summary %}
+<div class="table-responsive mt-4">
+    <table class="table table-bordered table-striped">
+        <thead class="table-light">
+            <tr>
+                <th>From Date (BS)</th>
+                <th>To Date (BS)</th>
+                <th>Driver</th>
+                <th>Total Maintenance Cost</th>
+                <th>Total Fuel Cost</th>
+                <th>Total Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in summary %}
+            <tr>
+                <td>{{ from_date|default:"-" }}</td>
+                <td>{{ to_date|default:"-" }}</td>
+                <td>{{ row.driver__name|default:"N/A" }}</td>
+                <td>{{ row.total_maintenance|floatformat:2 }}</td>
+                <td>{{ row.total_fuel|floatformat:2 }}</td>
+                <td>{{ row.total_cost|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var fromInput = document.getElementById("from-date");
+    var toInput = document.getElementById("to-date");
+    if(fromInput) fromInput.NepaliDatePicker();
+    if(toInput) toInput.NepaliDatePicker();
+    $('.selectpicker').selectpicker();
+});
+</script>
+{% endblock %}

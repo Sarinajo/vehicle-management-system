@@ -1,0 +1,104 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Raw Data - By Driver{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Raw Data (By Driver)</h2>
+
+<form method="get">
+  <div class="row mb-3">
+      <div class="col-md-3">
+          <label>From Date</label>
+          <input type="text" id="from-date" name="from_date" class="form-control" value="{{ from_date|default:'' }}" placeholder="Select From Date">
+      </div>
+      <div class="col-md-3">
+          <label>To Date</label>
+          <input type="text" id="to-date" name="to_date" class="form-control" value="{{ to_date|default:'' }}" placeholder="Select To Date">
+      </div>
+      <div class="col-md-3">
+          <label>Driver</label>
+          <select name="driver" class="form-control selectpicker" data-live-search="true">
+              <option value="">All Drivers</option>
+              {% for d in drivers %}
+                  <option value="{{ d.id }}" {% if d.id == selected_driver %}selected{% endif %}>{{ d.name }}</option>
+              {% endfor %}
+          </select>
+      </div>
+  </div>
+
+  <div class="mb-3">
+      <button type="submit" name="action" value="view" class="btn btn-primary me-2">View Raw Data</button>
+      <button type="submit" name="action" value="csv" class="btn btn-success">Download CSV</button>
+  </div>
+</form>
+{% if show_message %}
+<div class="alert alert-info mt-3">
+    Please select at least one filter (date, driver, or vehicle) to view the report.
+</div>
+{% endif %}
+
+{% if records %}
+<div class="table-responsive mt-4">
+    <table class="table table-striped table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Date (BS)</th>
+                <th>Vehicle Number</th>
+                <th>Type</th>
+                <th>Maintenance Cost</th>
+                <th>Fuel Cost</th>
+                <th>Total Cost</th>
+                <th>Distance Traveled</th>
+                <th>Driver</th>
+                <th>Paid To</th>
+                <th>Bill Number</th>
+                <th>Bill Date (BS)</th>
+                <th>Reason for Maintenance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>
+                    {% if record.bs_date %}
+                        {{ record.bs_date.year }}-{{ record.bs_date.month }}-{{ record.bs_date.day }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>{{ record.vehicle_number }}</td>
+                <td>{{ record.vehicle_type }}</td>
+                <td>{{ record.maintenance_cost|floatformat:2 }}</td>
+                <td>{{ record.fuel_cost|floatformat:2 }}</td>
+                <td>{{ record.total_cost|floatformat:2 }}</td>
+                <td>{{ record.distance_traveled|floatformat:0 }} Km</td>
+                <td>{{ record.driver.name|default:"-" }}</td>
+                <td>{{ record.paid_to_company }}</td>
+                <td>{{ record.bill_number }}</td>
+                <td>
+                    {% if record.bs_bill_date %}
+                        {{ record.bs_bill_date.year }}-{{ record.bs_bill_date.month }}-{{ record.bs_bill_date.day }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>{{ record.reason_for_maintenance }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p>No records found for the selected filters.</p>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var fromInput = document.getElementById("from-date");
+    var toInput = document.getElementById("to-date");
+    if(fromInput) fromInput.NepaliDatePicker();
+    if(toInput) toInput.NepaliDatePicker();
+    $('.selectpicker').selectpicker();
+});
+</script>
+{% endblock %}
