@@ -105,16 +105,43 @@ def success(request, record_id):
 
 @login_required(login_url='login')
 def my_records(request):
-    if request.user.is_superuser:
-        user_records = VehicleRecord.objects.all().order_by('-date', '-id')
-    else:
-        user_records = VehicleRecord.objects.filter(user=request.user).order_by('-date', '-id')
+    records = VehicleRecord.objects.none()  # ⛔ no query by default
+    show_message = False
 
-    for r in user_records:
-        r.bs_date = nepali_date.from_datetime_date(r.date)
-        r.bs_bill_date = nepali_date.from_datetime_date(r.bill_date)
+    from_date = request.GET.get('from_date')
+    to_date = request.GET.get('to_date')
+    action = request.GET.get('action')
 
-    return render(request, 'main/my_records.html', {'user_records': user_records})
+    if action == 'view':
+        if not from_date or not to_date:
+            show_message = True
+        else:
+            ad_from = bs_string_to_ad(from_date)
+            ad_to = bs_string_to_ad(to_date)
+
+            if not ad_from or not ad_to:
+                show_message = True
+            else:
+                if request.user.is_superuser:
+                    records = VehicleRecord.objects.all()
+                else:
+                    records = VehicleRecord.objects.filter(user=request.user)
+
+                records = records.filter(
+                    date__gte=ad_from,
+                    date__lte=ad_to
+                ).order_by('-date', '-id')
+
+                for r in records:
+                    r.bs_date = nepali_date.from_datetime_date(r.date)
+                    r.bs_bill_date = nepali_date.from_datetime_date(r.bill_date)
+
+    return render(request, 'main/my_records.html', {
+        'user_records': records,
+        'from_date': from_date,
+        'to_date': to_date,
+        'show_message': show_message
+    })
 
 
 # -----------------------------
@@ -133,6 +160,29 @@ def manage_drivers(request):
     drivers = Driver.objects.all().order_by('name')
     return render(request, 'main/drivers.html', {'form': form, 'drivers': drivers})
 
+@user_passes_test(lambda u: u.is_superuser)
+def edit_record(request, record_id):
+    record = get_object_or_404(VehicleRecord, id=record_id)
+
+    if request.method == 'POST':
+        form = VehicleRecordForm(request.POST, instance=record)
+        if form.is_valid():
+            form.save()
+            return redirect('my_records')
+    else:
+        form = VehicleRecordForm(instance=record)
+
+        # Pre-fill BS dates for display
+        record.bs_date = nepali_date.from_datetime_date(record.date)
+        record.bs_bill_date = nepali_date.from_datetime_date(record.bill_date)
+
+        form.fields['date'].initial = record.bs_date.strftime("%Y-%m-%d")
+        form.fields['bill_date'].initial = record.bs_bill_date.strftime("%Y-%m-%d")
+
+    return render(request, 'main/edit_record.html', {
+        'form': form,
+        'record': record
+    })
 
 # -----------------------------
 # Helpers

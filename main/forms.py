@@ -69,15 +69,24 @@ class VehicleRecordForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+
+        fuel_cost = cleaned_data.get('fuel_cost') or 0
         maintenance_cost = cleaned_data.get('maintenance_cost') or 0
         reason = cleaned_data.get('reason_for_maintenance')
 
-        # If maintenance cost > 0, reason is required
+        # ❌ Both are 0 → NOT allowed
+        if fuel_cost <= 0 and maintenance_cost <= 0:
+            self.add_error('fuel_cost', "Enter fuel or maintenance cost.")
+            self.add_error('maintenance_cost', "Enter fuel or maintenance cost.")
+
+        # ❌ Maintenance > 0 but no reason
         if maintenance_cost > 0 and not reason:
-            self.add_error('reason_for_maintenance',
-                           "Reason for maintenance is required when maintenance cost is entered.")
+            self.add_error(
+                'reason_for_maintenance',
+                "Reason for maintenance is required when maintenance cost is entered."
+            )
 
-
+        return cleaned_data
 # Admin form for adding drivers
 class DriverForm(forms.ModelForm):
     class Meta:

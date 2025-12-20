@@ -46,8 +46,18 @@
             <!-- Vehicle Form -->
             <a href="{% url 'home' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Vehicle Form</a>
 
-            <!-- My Records -->
-            <a href="{% url 'my_records' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'my_records' %}active{% endif %}">My Records</a>
+            <!-- My Records / Records -->
+<a href="{% url 'my_records' %}"
+   class="list-group-item list-group-item-action list-group-item-light p-3
+   {% if request.resolver_match.url_name == 'my_records' %}active{% endif %}">
+
+    {% if user.is_superuser %}
+        Records
+    {% else %}
+        My Records
+    {% endif %}
+</a>
+
 
             {% if user.is_superuser %}
             <div class="list-group-item p-0">

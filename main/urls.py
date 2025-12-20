@@ -10,6 +10,7 @@ urlpatterns = [
     path('logout/',views.user_logout, name='logout'),
     path('register/', views.register, name='register'),
     path('my-records/', views.my_records, name='my_records'),
+    path('records/edit/<int:record_id>/', views.edit_record, name='edit_record'),
     path('reports/', views.reports, name='reports'),
     path('drivers/', views.manage_drivers, name='manage_drivers'),
     path('reports/raw-driver/', views.reports_raw_driver, name='reports_raw_driver'),
