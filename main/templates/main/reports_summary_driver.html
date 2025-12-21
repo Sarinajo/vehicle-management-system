@@ -1,9 +1,9 @@
 {% extends 'main/base.html' %}
 
-{% block title %}Summary (By Driver){% endblock %}
+{% block title %}Driverwise Summary{% endblock %}
 
 {% block content %}
-<h2 class="mb-4">Summary (By Driver)</h2>
+<h2 class="mb-4">Driverwise Summary</h2>
 
 <form method="get">
   <div class="row mb-3">
@@ -27,8 +27,8 @@
   </div>
 
   <div class="mb-3">
-      <button type="submit" name="action" value="view" class="btn btn-success me-2">View Summary</button>
-      <button type="submit" name="action" value="csv" class="btn btn-primary">Download Summary CSV</button>
+      <button type="submit" name="action" value="view" class="btn btn-gradient me-2">View Summary</button>
+      <button type="submit" name="action" value="csv" class="btn btn-warning">Download Summary CSV</button>
   </div>
 </form>
 

@@ -1,9 +1,9 @@
 {% extends 'main/base.html' %}
 
-{% block title %}Raw Data - By Driver{% endblock %}
+{% block title %}Driverwise Details{% endblock %}
 
 {% block content %}
-<h2 class="mb-4">Raw Data (By Driver)</h2>
+<h2 class="mb-4">Driverwise Details</h2>
 
 <form method="get">
   <div class="row mb-3">
@@ -27,8 +27,8 @@
   </div>
 
   <div class="mb-3">
-      <button type="submit" name="action" value="view" class="btn btn-primary me-2">View Raw Data</button>
-      <button type="submit" name="action" value="csv" class="btn btn-success">Download CSV</button>
+      <button type="submit" name="action" value="view" class="btn btn-gradient me-2">View Raw Data</button>
+      <button type="submit" name="action" value="csv" class="btn btn-warning">Download CSV</button>
   </div>
 </form>
 {% if show_message %}
@@ -88,8 +88,7 @@
         </tbody>
     </table>
 </div>
-{% else %}
-<p>No records found for the selected filters.</p>
+
 {% endif %}
 
 <script>

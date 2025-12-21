@@ -10,6 +10,7 @@
  * Copyright 2011-2022 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+
 :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
@@ -10862,4 +10863,21 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
   body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
     margin-left: -15rem;
   }
+}
+/* Gradient button without jump and no line */
+.btn-gradient {
+    background: linear-gradient(to right, #006400, #00b300); /* left dark green, right light green */
+    color: white; /* text stays white */
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    transition: background 0.3s ease; /* smooth color change */
+}
+
+/* Hover: flip gradient colors, text stays white */
+.btn-gradient:hover {
+    background: linear-gradient(to right, #00b300, #006400); /* left light, right dark */
+    color: white;
 }

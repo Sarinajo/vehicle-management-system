@@ -13,51 +13,163 @@
 
     <!-- Nepali Datepicker CSS -->
     <link href="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/css/nepali.datepicker.v5.0.6.min.css" rel="stylesheet">
+
     <style>
-        #sidebar-wrapper .list-group-item.active {
-    background-color: #0d6efd; /* Bootstrap primary blue */
-    color: white; /* Text color */
-    font-weight: bold; /* Optional: make active item bold */
-    border-left: 4px solid #0b5ed7; /* Optional: small left border highlight */
+        /* HEADER */
+        header {
+            height: 60px;
+            background: linear-gradient(to right, #006400, #90ee90);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1100;
+        }
+        header img {
+            height: 40px;
+        }
+
+        /* WRAPPER */
+        #wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        #sidebar-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 250px;
+            flex-shrink: 0;
+            background: linear-gradient(to bottom, #006400, #90ee90);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* subtle divider */
+        }
+
+        #sidebar-wrapper .sidebar-heading {
+            padding: 1rem 1.25rem;
+            font-size: 1.25rem;
+            background-color: transparent;
+            color: white;
+            margin-top: 60px; /* offset for fixed header */
+        }
+
+        /* Sidebar items */
+        #sidebar-wrapper .list-group-item {
+            width: 100%;
+            box-sizing: border-box;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+            margin: 0;
+            background: transparent;
+            color: white;
+            border: none;
+            transition: color 0.3s ease;
+        }
+
+        #sidebar-wrapper .list-group-item:hover {
+            background-color: rgba(255, 255, 255, 0.05); /* subtle hover */
+        }
+
+        /* Active item underline wrapping text */
+        #sidebar-wrapper .list-group-item.active > span {
+            border-bottom: 2px solid white;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        /* Submenu collapse */
+        #sidebar-wrapper .collapse .list-group-item {
+            padding-left: 2rem;
+        }
+
+        /* Fully hide sidebar when toggled */
+        body.sb-sidenav-toggled #sidebar-wrapper {
+            transform: translateX(-100%);
+        }
+
+        /* PAGE CONTENT */
+        #page-content-wrapper {
+            flex-grow: 1;
+            padding: 20px;
+            transition: margin-left 0.3s;
+            margin-left: 250px; /* leave space for fixed sidebar */
+            margin-top: 60px;  /* offset for fixed header */
+        }
+
+        body.sb-sidenav-toggled #page-content-wrapper {
+            margin-left: 0; /* expand content when sidebar is hidden */
+        }
+
+        /* Theme button */
+        .btn-theme {
+            background: linear-gradient(to right, #006400, #90ee90);
+            color: white;
+            border: none;
+        }
+        .btn-theme:hover {
+            background: linear-gradient(to right, #90ee90, #006400);
+            color: black;
+        }
+        /* Card around form */
+.form-card {
+    background-color: #f8f9fa;  /* light neutral background */
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    max-width: 700px;
+    margin: auto;
 }
+
+.form-group-wrapper {
+    margin-bottom: 15px;
+}
+
+.form-group-wrapper input,
+.form-group-wrapper select {
+    border: 1px solid #ccc; /* neutral border */
+    border-radius: 5px;
+}
+
+.form-group-wrapper input:focus,
+.form-group-wrapper select:focus {
+    border-color: #006400; /* theme green on focus */
+    box-shadow: 0 0 5px rgba(0, 100, 0, 0.2);
+}
+
 
     </style>
 </head>
 <body>
 
+<header>
+    <img src="{% static 'main/images/logo.png' %}" alt="Logo">
+    <button class="btn btn-theme" id="sidebarToggle">Menu</button>
+</header>
+
 <div class="d-flex" id="wrapper">
     <!-- Sidebar -->
-    <div class="border-end bg-white" id="sidebar-wrapper">
-        {% if user.is_authenticated %}
-        <div class="sidebar-heading border-bottom bg-light">
-            Vehicle Management<br>
-            <small>Hi, {{ user.username }}</small>
-        </div>
-        {% else %}
-        <div class="sidebar-heading border-bottom bg-light">
-            Vehicle Management
-        </div>
-        {% endif %}
+    <div class="border-end" id="sidebar-wrapper">
+        <div class="sidebar-heading border-bottom bg-transparent">Vehicle Management</div>
 
         <div class="list-group list-group-flush">
-            <!-- Dashboard -->
-            <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Dashboard</a>
-
-            <!-- Vehicle Form -->
-            <a href="{% url 'home' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Vehicle Form</a>
-
-            <!-- My Records / Records -->
-<a href="{% url 'my_records' %}"
-   class="list-group-item list-group-item-action list-group-item-light p-3
-   {% if request.resolver_match.url_name == 'my_records' %}active{% endif %}">
-
-    {% if user.is_superuser %}
-        Records
-    {% else %}
-        My Records
-    {% endif %}
-</a>
-
+            <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                <span>Dashboard</span>
+            </a>
+            <a href="{% url 'home' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                <span>Vehicle Form</span>
+            </a>
+            <a href="{% url 'my_records' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'my_records' %}active{% endif %}">
+                <span>{% if user.is_superuser %}Records{% else %}My Records{% endif %}</span>
+            </a>
 
             {% if user.is_superuser %}
             <div class="list-group-item p-0">
@@ -67,29 +179,28 @@
                    role="button"
                    aria-expanded="false"
                    aria-controls="reportsSubMenu">
-                    Reports
+                    <span>Reports</span>
                 </a>
 
                 <div class="collapse ps-3" id="reportsSubMenu">
-                    <a href="{% url 'reports_raw_driver' %}" class="list-group-item list-group-item-action list-group-item-light">Driverwise Detail</a>
-                    <a href="{% url 'reports_summary_driver' %}" class="list-group-item list-group-item-action list-group-item-light">Driverwise Summary</a>
-                    <a href="{% url 'reports_raw_vehicle' %}" class="list-group-item list-group-item-action list-group-item-light">Vehiclewise Detail</a>
-                    <a href="{% url 'reports_summary_vehicle' %}" class="list-group-item list-group-item-action list-group-item-light">Vehiclewise Summary</a>
+                    <a href="{% url 'reports_raw_driver' %}" class="list-group-item list-group-item-action list-group-item-light"><span>Driverwise Detail</span></a>
+                    <a href="{% url 'reports_summary_driver' %}" class="list-group-item list-group-item-action list-group-item-light"><span>Driverwise Summary</span></a>
+                    <a href="{% url 'reports_raw_vehicle' %}" class="list-group-item list-group-item-action list-group-item-light"><span>Vehiclewise Detail</span></a>
+                    <a href="{% url 'reports_summary_vehicle' %}" class="list-group-item list-group-item-action list-group-item-light"><span>Vehiclewise Summary</span></a>
                 </div>
             </div>
 
-            <a href="{% url 'manage_drivers' %}" class="list-group-item list-group-item-action list-group-item-light p-3">Manage Drivers</a>
+            <a href="{% url 'manage_drivers' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'manage_drivers' %}active{% endif %}"><span>Manage Drivers</span></a>
             {% endif %}
 
             {% if user.is_authenticated %}
-            <a href="{% url 'logout' %}" class="list-group-item list-group-item-action list-group-item-light p-3">Logout</a>
+            <a href="{% url 'logout' %}" class="list-group-item list-group-item-action list-group-item-light p-3"><span>Logout</span></a>
             {% endif %}
         </div>
     </div>
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
-        <button class="btn btn-primary m-3" id="sidebarToggle">Menu</button>
         <div class="container-fluid mt-3">
             {% block content %}{% endblock %}
         </div>
@@ -125,13 +236,12 @@ document.addEventListener('DOMContentLoaded', function() {
     $('.selectpicker').selectpicker();
 
     // Sidebar Toggle
-    const sidebarToggle = document.body.querySelector('#sidebarToggle');
-    if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', event => {
-            event.preventDefault();
-            document.body.classList.toggle('sb-sidenav-toggled');
-        });
-    }
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarToggleContent = document.getElementById('sidebarToggleContent');
+    const toggleSidebar = () => document.body.classList.toggle('sb-sidenav-toggled');
+
+    if (sidebarToggle) sidebarToggle.addEventListener('click', toggleSidebar);
+    if (sidebarToggleContent) sidebarToggleContent.addEventListener('click', toggleSidebar);
 });
 </script>
 
