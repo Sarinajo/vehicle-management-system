@@ -1,17 +1,18 @@
 {% load static %}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Digital Banking - Vehicle Management System</title>
 
-    <!-- Bootstrap -->
+    <!-- Bootstrap / Custom CSS -->
     <link href="{% static 'main/css/scripts.css' %}" rel="stylesheet">
 </head>
-<body class="bg-light">
 
-<div class="container d-flex justify-content-center align-items-center"
-     style="min-height: 100vh;">
+<body class="bg-light d-flex flex-column min-vh-100">
 
+<!-- Login Section -->
+<div class="container d-flex justify-content-center align-items-center flex-grow-1">
     <div class="card p-4" style="width: 350px;">
         <h4 class="text-center mb-4">Login</h4>
 
@@ -20,24 +21,32 @@
 
             <div class="mb-3">
                 <label class="form-label">Username</label>
-                <input type="text" name="username"
-                       class="form-control" required>
+                <input type="text" name="username" class="form-control" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Password</label>
-                <input type="password" name="password"
-                       class="form-control" required>
+                <input type="password" name="password" class="form-control" required>
             </div>
 
-            <button type="submit" class="btn btn-gradient w-100">
+            <button type="submit" class="btn btn-gradient w-100 mb-2">
                 Login
             </button>
-            <a href="{% url 'register' %}">Create an account</a>
 
+            <div class="text-center">
+                <a href="{% url 'register' %}">Create an account</a>
+            </div>
         </form>
     </div>
 </div>
+
+<!-- Footer -->
+<footer class="py-3 custom-footer-bg text-light text-center">
+    <div class="mb-2">
+        <img src="{% static 'images/logo1.png' %}" alt="ADBL Logo" style="width: 220px; height: auto;">
+    </div>
+    <p class="m-0">Digital Banking Department - ADBL 2025</p>
+</footer>
 
 </body>
 </html>

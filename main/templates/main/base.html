@@ -1,4 +1,5 @@
 {% load static %}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,10 +9,10 @@
     <!-- Custom CSS -->
     <link href="{% static 'main/css/scripts.css' %}" rel="stylesheet">
 
-    <!-- Bootstrap Select CSS -->
+    <!-- Bootstrap Select -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
 
-    <!-- Nepali Datepicker CSS -->
+    <!-- Nepali Datepicker -->
     <link href="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/css/nepali.datepicker.v5.0.6.min.css" rel="stylesheet">
 
     <style>
@@ -46,202 +47,180 @@
             left: 0;
             height: 100vh;
             width: 250px;
-            flex-shrink: 0;
             background: linear-gradient(to bottom, #006400, #90ee90);
             transition: transform 0.3s ease;
             z-index: 1000;
-            overflow-y: auto;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* subtle divider */
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
         }
 
-        #sidebar-wrapper .sidebar-heading {
+        body.sb-sidenav-toggled #sidebar-wrapper {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-heading {
             padding: 1rem 1.25rem;
             font-size: 1.25rem;
-            background-color: transparent;
             color: white;
-            margin-top: 60px; /* offset for fixed header */
+            margin-top: 60px;
         }
 
-        /* Sidebar items */
-        #sidebar-wrapper .list-group-item {
-            width: 100%;
-            box-sizing: border-box;
-            padding-left: 1.25rem;
-            padding-right: 1.25rem;
-            margin: 0;
+        /* Sidebar menu */
+        .sidebar-menu {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .list-group-item {
             background: transparent;
             color: white;
             border: none;
-            transition: color 0.3s ease;
         }
 
-        #sidebar-wrapper .list-group-item:hover {
-            background-color: rgba(255, 255, 255, 0.05); /* subtle hover */
+        .list-group-item:hover {
+            background-color: rgba(255,255,255,0.1);
         }
 
-        /* Active item underline wrapping text */
-        #sidebar-wrapper .list-group-item.active > span {
+        .list-group-item.active > span {
             border-bottom: 2px solid white;
-            display: inline-block;
             font-weight: 600;
         }
 
-        /* Submenu collapse */
-        #sidebar-wrapper .collapse .list-group-item {
+        .collapse .list-group-item {
             padding-left: 2rem;
         }
 
-        /* Fully hide sidebar when toggled */
-        body.sb-sidenav-toggled #sidebar-wrapper {
-            transform: translateX(-100%);
+        /* Sidebar footer logo */
+        .sidebar-footer {
+            text-align: center;
+            padding: 15px 10px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .sidebar-footer img {
+            width: 120px;
+            max-width: 100%;
+            opacity: 0.9;
         }
 
         /* PAGE CONTENT */
         #page-content-wrapper {
             flex-grow: 1;
             padding: 20px;
+            margin-left: 250px;
+            margin-top: 60px;
             transition: margin-left 0.3s;
-            margin-left: 250px; /* leave space for fixed sidebar */
-            margin-top: 60px;  /* offset for fixed header */
         }
 
         body.sb-sidenav-toggled #page-content-wrapper {
-            margin-left: 0; /* expand content when sidebar is hidden */
+            margin-left: 0;
         }
 
-        /* Theme button */
+        /* Buttons */
         .btn-theme {
             background: linear-gradient(to right, #006400, #90ee90);
             color: white;
             border: none;
         }
+
         .btn-theme:hover {
             background: linear-gradient(to right, #90ee90, #006400);
             color: black;
         }
-        /* Card around form */
-.form-card {
-    background-color: #f8f9fa;  /* light neutral background */
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    max-width: 700px;
-    margin: auto;
-}
 
-.form-group-wrapper {
-    margin-bottom: 15px;
-}
-
-.form-group-wrapper input,
-.form-group-wrapper select {
-    border: 1px solid #ccc; /* neutral border */
-    border-radius: 5px;
-}
-
-.form-group-wrapper input:focus,
-.form-group-wrapper select:focus {
-    border-color: #006400; /* theme green on focus */
-    box-shadow: 0 0 5px rgba(0, 100, 0, 0.2);
-}
-
-
+        /* Form card */
+        .form-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            max-width: 700px;
+            margin: auto;
+        }
     </style>
 </head>
+
 <body>
 
+<!-- HEADER -->
 <header>
     <img src="{% static 'main/images/logo.png' %}" alt="Logo">
     <button class="btn btn-theme" id="sidebarToggle">Menu</button>
 </header>
 
-<div class="d-flex" id="wrapper">
-    <!-- Sidebar -->
-    <div class="border-end" id="sidebar-wrapper">
-        <div class="sidebar-heading border-bottom bg-transparent">Vehicle Management</div>
+<div id="wrapper">
 
-        <div class="list-group list-group-flush">
-            <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-                <span>Dashboard</span>
-            </a>
-            <a href="{% url 'home' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
-                <span>Vehicle Form</span>
-            </a>
-            <a href="{% url 'my_records' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'my_records' %}active{% endif %}">
-                <span>{% if user.is_superuser %}Records{% else %}My Records{% endif %}</span>
-            </a>
+    <!-- SIDEBAR -->
+    <div id="sidebar-wrapper">
+        <div class="sidebar-heading">Vehicle Management</div>
 
-            {% if user.is_superuser %}
-            <div class="list-group-item p-0">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   data-bs-toggle="collapse"
-                   href="#reportsSubMenu"
-                   role="button"
-                   aria-expanded="false"
-                   aria-controls="reportsSubMenu">
+        <div class="sidebar-menu">
+            <div class="list-group list-group-flush">
+
+                <a href="{% url 'dashboard' %}" class="list-group-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="{% url 'home' %}" class="list-group-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                    <span>Vehicle Form</span>
+                </a>
+
+                <a href="{% url 'my_records' %}" class="list-group-item {% if request.resolver_match.url_name == 'my_records' %}active{% endif %}">
+                    <span>{% if user.is_superuser %}Records{% else %}My Records{% endif %}</span>
+                </a>
+
+                {% if user.is_superuser %}
+                <a class="list-group-item" data-bs-toggle="collapse" href="#reportsMenu">
                     <span>Reports</span>
                 </a>
 
-                <div class="collapse ps-3" id="reportsSubMenu">
-                    <a href="{% url 'reports_raw_driver' %}" class="list-group-item list-group-item-action list-group-item-light"><span>Driverwise Detail</span></a>
-                    <a href="{% url 'reports_summary_driver' %}" class="list-group-item list-group-item-action list-group-item-light"><span>Driverwise Summary</span></a>
-                    <a href="{% url 'reports_raw_vehicle' %}" class="list-group-item list-group-item-action list-group-item-light"><span>Vehiclewise Detail</span></a>
-                    <a href="{% url 'reports_summary_vehicle' %}" class="list-group-item list-group-item-action list-group-item-light"><span>Vehiclewise Summary</span></a>
+                <div class="collapse" id="reportsMenu">
+                    <a href="{% url 'reports_raw_driver' %}" class="list-group-item"><span>Driverwise Detail</span></a>
+                    <a href="{% url 'reports_summary_driver' %}" class="list-group-item"><span>Driverwise Summary</span></a>
+                    <a href="{% url 'reports_raw_vehicle' %}" class="list-group-item"><span>Vehiclewise Detail</span></a>
+                    <a href="{% url 'reports_summary_vehicle' %}" class="list-group-item"><span>Vehiclewise Summary</span></a>
                 </div>
+
+                <a href="{% url 'manage_drivers' %}" class="list-group-item {% if request.resolver_match.url_name == 'manage_drivers' %}active{% endif %}">
+                    <span>Manage Drivers</span>
+                </a>
+                {% endif %}
+
+                <a href="{% url 'logout' %}" class="list-group-item">
+                    <span>Logout</span>
+                </a>
+
             </div>
+        </div>
 
-            <a href="{% url 'manage_drivers' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'manage_drivers' %}active{% endif %}"><span>Manage Drivers</span></a>
-            {% endif %}
-
-            {% if user.is_authenticated %}
-            <a href="{% url 'logout' %}" class="list-group-item list-group-item-action list-group-item-light p-3"><span>Logout</span></a>
-            {% endif %}
+        <!-- SIDEBAR BOTTOM LOGO -->
+        <div class="sidebar-footer">
+            <img src="{% static 'images/logo1.png' %}" alt="ADBL Logo">
         </div>
     </div>
 
-    <!-- Page Content -->
+    <!-- PAGE CONTENT -->
     <div id="page-content-wrapper">
         <div class="container-fluid mt-3">
             {% block content %}{% endblock %}
         </div>
     </div>
+
 </div>
 
-<!-- jQuery -->
+<!-- JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Bootstrap JS Bundle -->
 <script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
-
-<!-- Bootstrap Select JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
-
-<!-- Nepali Datepicker JS -->
 <script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.6.min.js"></script>
 
-<script type="text/javascript">
-document.addEventListener('DOMContentLoaded', function() {
-    // Nepali Datepickers
-    var dateInput = document.getElementById("date-nepali");
-    var billInput = document.getElementById("bill-nepali");
-    var fromInput = document.getElementById("from-date");
-    var toInput = document.getElementById("to-date");
-
-    if(dateInput) dateInput.NepaliDatePicker();
-    if(billInput) billInput.NepaliDatePicker();
-    if(fromInput) fromInput.NepaliDatePicker();
-    if(toInput) toInput.NepaliDatePicker();
-
-    // Bootstrap Select
-    $('.selectpicker').selectpicker();
-
-    // Sidebar Toggle
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidebarToggleContent = document.getElementById('sidebarToggleContent');
-    const toggleSidebar = () => document.body.classList.toggle('sb-sidenav-toggled');
-
-    if (sidebarToggle) sidebarToggle.addEventListener('click', toggleSidebar);
-    if (sidebarToggleContent) sidebarToggleContent.addEventListener('click', toggleSidebar);
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('sidebarToggle')
+        .addEventListener('click', () => {
+            document.body.classList.toggle('sb-sidenav-toggled');
+        });
 });
 </script>
 
