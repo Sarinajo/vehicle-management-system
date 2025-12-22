@@ -8,11 +8,11 @@
     <!-- Custom CSS -->
     <link href="{% static 'main/css/scripts.css' %}" rel="stylesheet">
 
-    <!-- Bootstrap Select CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+    <!-- Bootstrap Select CSS (local) -->
+    <link href="{% static 'main/css/bootstrap-select.min.css' %}" rel="stylesheet">
 
-    <!-- Nepali Datepicker CSS -->
-    <link href="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/css/nepali.datepicker.v5.0.6.min.css" rel="stylesheet">
+    <!-- Nepali Datepicker CSS (local) -->
+    <link href="{% static 'main/css/nepali.datepicker.v5.0.6.min.css' %}" rel="stylesheet">
 
     <style>
         /* HEADER */
@@ -29,15 +29,10 @@
             width: 100%;
             z-index: 1100;
         }
-        header img {
-            height: 40px;
-        }
+        header img { height: 40px; }
 
         /* WRAPPER */
-        #wrapper {
-            display: flex;
-            min-height: 100vh;
-        }
+        #wrapper { display: flex; min-height: 100vh; }
 
         /* SIDEBAR */
         #sidebar-wrapper {
@@ -51,18 +46,15 @@
             transition: transform 0.3s ease;
             z-index: 1000;
             overflow-y: auto;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* subtle divider */
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
         }
-
         #sidebar-wrapper .sidebar-heading {
             padding: 1rem 1.25rem;
             font-size: 1.25rem;
             background-color: transparent;
             color: white;
-            margin-top: 60px; /* offset for fixed header */
+            margin-top: 60px;
         }
-
-        /* Sidebar items */
         #sidebar-wrapper .list-group-item {
             width: 100%;
             box-sizing: border-box;
@@ -74,40 +66,26 @@
             border: none;
             transition: color 0.3s ease;
         }
-
         #sidebar-wrapper .list-group-item:hover {
-            background-color: rgba(255, 255, 255, 0.05); /* subtle hover */
+            background-color: rgba(255, 255, 255, 0.05);
         }
-
-        /* Active item underline wrapping text */
         #sidebar-wrapper .list-group-item.active > span {
             border-bottom: 2px solid white;
             display: inline-block;
             font-weight: 600;
         }
-
-        /* Submenu collapse */
-        #sidebar-wrapper .collapse .list-group-item {
-            padding-left: 2rem;
-        }
-
-        /* Fully hide sidebar when toggled */
-        body.sb-sidenav-toggled #sidebar-wrapper {
-            transform: translateX(-100%);
-        }
+        #sidebar-wrapper .collapse .list-group-item { padding-left: 2rem; }
+        body.sb-sidenav-toggled #sidebar-wrapper { transform: translateX(-100%); }
 
         /* PAGE CONTENT */
         #page-content-wrapper {
             flex-grow: 1;
             padding: 20px;
             transition: margin-left 0.3s;
-            margin-left: 250px; /* leave space for fixed sidebar */
-            margin-top: 60px;  /* offset for fixed header */
+            margin-left: 250px;
+            margin-top: 60px;
         }
-
-        body.sb-sidenav-toggled #page-content-wrapper {
-            margin-left: 0; /* expand content when sidebar is hidden */
-        }
+        body.sb-sidenav-toggled #page-content-wrapper { margin-left: 0; }
 
         /* Theme button */
         .btn-theme {
@@ -119,33 +97,27 @@
             background: linear-gradient(to right, #90ee90, #006400);
             color: black;
         }
+
         /* Card around form */
-.form-card {
-    background-color: #f8f9fa;  /* light neutral background */
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    max-width: 700px;
-    margin: auto;
-}
-
-.form-group-wrapper {
-    margin-bottom: 15px;
-}
-
-.form-group-wrapper input,
-.form-group-wrapper select {
-    border: 1px solid #ccc; /* neutral border */
-    border-radius: 5px;
-}
-
-.form-group-wrapper input:focus,
-.form-group-wrapper select:focus {
-    border-color: #006400; /* theme green on focus */
-    box-shadow: 0 0 5px rgba(0, 100, 0, 0.2);
-}
-
-
+        .form-card {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            max-width: 700px;
+            margin: auto;
+        }
+        .form-group-wrapper { margin-bottom: 15px; }
+        .form-group-wrapper input,
+        .form-group-wrapper select {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group-wrapper input:focus,
+        .form-group-wrapper select:focus {
+            border-color: #006400;
+            box-shadow: 0 0 5px rgba(0, 100, 0, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -161,15 +133,9 @@
         <div class="sidebar-heading border-bottom bg-transparent">Vehicle Management</div>
 
         <div class="list-group list-group-flush">
-            <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-                <span>Dashboard</span>
-            </a>
-            <a href="{% url 'home' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
-                <span>Vehicle Form</span>
-            </a>
-            <a href="{% url 'my_records' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'my_records' %}active{% endif %}">
-                <span>{% if user.is_superuser %}Records{% else %}My Records{% endif %}</span>
-            </a>
+            <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"><span>Dashboard</span></a>
+            <a href="{% url 'home' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'home' %}active{% endif %}"><span>Vehicle Form</span></a>
+            <a href="{% url 'my_records' %}" class="list-group-item list-group-item-action list-group-item-light p-3 {% if request.resolver_match.url_name == 'my_records' %}active{% endif %}"><span>{% if user.is_superuser %}Records{% else %}My Records{% endif %}</span></a>
 
             {% if user.is_superuser %}
             <div class="list-group-item p-0">
@@ -208,16 +174,15 @@
 </div>
 
 <!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Bootstrap JS Bundle -->
+<script src="{% static 'main/js/jquery-3.6.0.min.js' %}"></script>
+<!-- Bootstrap JS Bundle (local) -->
 <script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
 
-<!-- Bootstrap Select JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+<!-- Bootstrap Select JS (local) -->
+<script src="{% static 'main/js/bootstrap-select.min.js' %}"></script>
 
-<!-- Nepali Datepicker JS -->
-<script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.6.min.js"></script>
+<!-- Nepali Datepicker JS (local) -->
+<script src="{% static 'main/js/nepali.datepicker.v5.0.6.min.js' %}"></script>
 
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() {
