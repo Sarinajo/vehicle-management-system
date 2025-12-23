@@ -210,7 +210,7 @@ def reports(request):
 # =====================================================
 
 
-## 1️⃣ RAW DATA – BY DRIVER (Corrected)
+## RAW DATA – BY DRIVER
 @user_passes_test(lambda u: u.is_superuser)
 def reports_raw_driver(request):
     drivers = Driver.objects.all().order_by('name')
@@ -343,7 +343,7 @@ def reports_summary_driver(request):
 
 
 
-# 3️⃣ RAW DATA – BY VEHICLE
+#RAW DATA – BY VEHICLE
 @user_passes_test(lambda u: u.is_superuser)
 def reports_raw_vehicle(request):
     records = VehicleRecord.objects.none()
@@ -424,7 +424,7 @@ def reports_raw_vehicle(request):
 
 
 
-# 4️⃣ SUMMARY – BY VEHICLE
+#SUMMARY – BY VEHICLE
 @user_passes_test(lambda u: u.is_superuser)
 def reports_summary_vehicle(request):
     summary = []

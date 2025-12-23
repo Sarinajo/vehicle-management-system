@@ -23,7 +23,7 @@ class VehicleRecord(models.Model):
     fuel_cost = models.DecimalField(max_digits=10, decimal_places=2)
     total_cost = models.DecimalField(max_digits=10, decimal_places=2)
 
-    # Removed driver_name, replaced with ForeignKey
+
     driver = models.ForeignKey(Driver, on_delete=models.SET_NULL, null=True, default=None)
 
     paid_to_company = models.CharField(max_length=50)

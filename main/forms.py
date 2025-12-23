@@ -2,7 +2,7 @@ from django import forms
 from .models import VehicleRecord, Driver
 
 class VehicleRecordForm(forms.ModelForm):
-    # Keep driver dropdown searchable/typeable
+    # driver dropdown
     driver = forms.ModelChoiceField(
         queryset=Driver.objects.all(),
         widget=forms.Select(attrs={
@@ -14,18 +14,18 @@ class VehicleRecordForm(forms.ModelForm):
 
     fuel_cost = forms.DecimalField(
         required=False,
-        initial=0,  # default to 0
+        initial=0,  # default 0
         widget=forms.NumberInput(attrs={'class': 'form-control'})
     )
 
     maintenance_cost = forms.DecimalField(
         required=False,
-        initial=0,  # default to 0
+        initial=0,
         widget=forms.NumberInput(attrs={'class': 'form-control'})
     )
 
     reason_for_maintenance = forms.CharField(
-        required=False,  # validated conditionally
+        required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
 
@@ -74,12 +74,12 @@ class VehicleRecordForm(forms.ModelForm):
         maintenance_cost = cleaned_data.get('maintenance_cost') or 0
         reason = cleaned_data.get('reason_for_maintenance')
 
-        # ❌ Both are 0 → NOT allowed
+        #Both are 0 , not allowed
         if fuel_cost <= 0 and maintenance_cost <= 0:
             self.add_error('fuel_cost', "Enter fuel or maintenance cost.")
             self.add_error('maintenance_cost', "Enter fuel or maintenance cost.")
 
-        # ❌ Maintenance > 0 but no reason
+        # Maintenance > 0 but no reason
         if maintenance_cost > 0 and not reason:
             self.add_error(
                 'reason_for_maintenance',
