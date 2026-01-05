@@ -1,0 +1,25 @@
+services:
+  migration:
+    image: vehicle_mgmt:latest
+    profiles: [initialize]
+    env_file:
+      - /var/backup/config/vehicle_mgmt/.env
+    command: bash -c "python manage.py makemigrations && python manage.py migrate"
+    networks:
+      - vehicle_mgmt
+
+  app:
+    image: vehicle_mgmt:latest
+    ports:
+      - 8006:8000
+    env_file:
+      - /var/backup/config/vehicle_mgmt/.env
+    restart: always
+    volumes:
+      - /var/backup/vehicle_mgmt/media:/app/media
+      - /var/backup/vehicle_mgmt/data:/app/db.sqlite3
+    networks:
+      - vehicle_mgmt
+
+networks:
+  vehicle_mgmt:
