@@ -17,7 +17,6 @@ services:
     restart: always
     volumes:
       - /var/backup/vehicle_mgmt/media:/app/media
-      - /var/backup/vehicle_mgmt/data:/app/db.sqlite3
     networks:
       - vehicle_mgmt
 
